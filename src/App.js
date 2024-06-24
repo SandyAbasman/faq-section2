@@ -32,25 +32,38 @@ function App() {
 }
 
 function QuestionContainer({ data }) {
+  const [currOpen, setCurrOpen] = useState(null);
   return (
     <div className="question-container">
       {data.map((item, index) => (
         <Question
           text={item.text}
-          answer={item.answer}
           number={index}
           key={index}
-        />
+          currOpen={currOpen}
+          setCurrOpen={setCurrOpen}
+        >
+          {item.answer}
+        </Question>
       ))}
+      <Question
+        text="New text"
+        number={21}
+        key={20}
+        currOpen={currOpen}
+        setCurrOpen={setCurrOpen}
+      >
+        <p>new answer</p>
+      </Question>
     </div>
   );
 }
 
-function Question({ text, answer, number }) {
-  const [isOpen, setIsOpen] = useState(false);
+function Question({ text, number, currOpen, setCurrOpen, children }) {
+  const isOpen = number === currOpen;
 
   function handleToggle() {
-    setIsOpen((isOpen) => !isOpen);
+    setCurrOpen(isOpen ? null : number);
   }
   return (
     <div
@@ -64,7 +77,7 @@ function Question({ text, answer, number }) {
       </div>
       {isOpen && (
         <div className="answer">
-          <p>{answer}</p>
+          <p>{children}</p>
         </div>
       )}
     </div>
